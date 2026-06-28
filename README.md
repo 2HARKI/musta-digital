@@ -9,7 +9,7 @@ Hvis du er ny med nettsider, start med `GUIDE-FOR-NYBEGYNNERE.md`. Den forklarer
 ## Innhold som bør byttes før publisering
 
 - Telefonnummer: `+47 123 45 678`
-- E-post: `post@mustadigital.no`
+- E-post: `kontakt@mustadigital.no`
 - Domene i structured data: `https://mustadigital.no`
 - Løsningspakkene hvis du vil endre hva du tilbyr
 - Eventuelle ekte referanser/kundeeksempler når du får dine første kunder

@@ -55,6 +55,6 @@ if (form && statusText) {
     ].join("\n");
 
     statusText.textContent = "E-postklienten åpnes med ferdig utfylt melding.";
-    window.location.href = `mailto:post@mustadigital.no?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = `mailto:kontakt@mustadigital.no?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   });
 }

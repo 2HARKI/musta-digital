@@ -25,7 +25,7 @@ Hvis du bare vil endre tekst, telefon, e-post eller hvilke tjenester du tilbyr, 
 
 Åpne `index.html` i VS Code og søk etter disse:
 
-- `post@mustadigital.no`
+- `kontakt@mustadigital.no`
 - `+47 123 45 678`
 - `https://mustadigital.no`
 
@@ -85,7 +85,7 @@ I `index.html` finnes e-post og telefon flere steder.
 Bruk søk:
 
 1. Trykk `Command + F`.
-2. Søk etter `post@mustadigital.no`.
+2. Søk etter `kontakt@mustadigital.no`.
 3. Bytt til din e-post.
 4. Søk etter `+47 123 45 678`.
 5. Bytt til ditt telefonnummer.
@@ -93,7 +93,7 @@ Bruk søk:
 Du vil også se dette:
 
 ```html
-href="mailto:post@mustadigital.no"
+href="mailto:kontakt@mustadigital.no"
 ```
 
 Det betyr at knappen åpner e-post. Bytt e-posten der også.
