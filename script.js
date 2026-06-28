@@ -34,27 +34,38 @@ if (navToggle && nav && header) {
 }
 
 if (form && statusText) {
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
+    const submitButton = form.querySelector("button[type='submit']");
+    const buttonLabel = submitButton?.querySelector("span");
     const data = new FormData(form);
-    const name = data.get("name") || "";
-    const email = data.get("email") || "";
-    const company = data.get("company") || "";
-    const service = data.get("service") || "";
-    const message = data.get("message") || "";
+    const payload = Object.fromEntries(data.entries());
 
-    const subject = `Ny forespørsel fra ${company || name}`;
-    const body = [
-      `Navn: ${name}`,
-      `E-post: ${email}`,
-      `Bedrift: ${company}`,
-      `Tjeneste: ${service}`,
-      "",
-      "Melding:",
-      message
-    ].join("\n");
+    statusText.textContent = "Sender forespørselen...";
+    if (submitButton) submitButton.disabled = true;
+    if (buttonLabel) buttonLabel.textContent = "Sender...";
 
-    statusText.textContent = "E-postklienten åpnes med ferdig utfylt melding.";
-    window.location.href = `mailto:kontakt@mustadigital.no?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(result.message || "Kunne ikke sende skjemaet.");
+      }
+
+      statusText.textContent = "Takk! Forespørselen er sendt. Vi tar kontakt så snart vi kan.";
+      form.reset();
+    } catch (error) {
+      statusText.textContent = "Beklager, skjemaet kunne ikke sendes akkurat nå. Send oss gjerne e-post direkte.";
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+      if (buttonLabel) buttonLabel.textContent = "Send forespørsel";
+    }
   });
 }

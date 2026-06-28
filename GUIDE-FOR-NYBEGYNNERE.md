@@ -165,7 +165,65 @@ https://musta-digital.vercel.app
 
 Når du senere endrer filer i VS Code og pusher til GitHub, vil Vercel lage ny versjon automatisk.
 
-## 9. Slik kobler du til eget domene
+## 9. Slik aktiverer du ekte kontaktskjema
+
+Kontaktskjemaet er nå satt opp slik at kunden kan trykke `Send forespørsel` direkte på nettsiden. Da sendes meldingen via Vercel og e-postkontoen din.
+
+For at dette skal virke, må Vercel få lov til å sende e-post. Du gjør det med miljøvariabler. Tenk på miljøvariabler som hemmelige innstillinger som bare Vercel ser.
+
+Først må du ha en ekte e-postkonto hos Webhuset, for eksempel:
+
+```text
+kontakt@mustadigital.no
+```
+
+Så gjør du dette i Vercel:
+
+1. Gå til Vercel.
+2. Åpne prosjektet `musta-digital`.
+3. Gå til `Settings`.
+4. Gå til `Environment Variables`.
+5. Legg til disse én og én:
+
+```text
+SMTP_HOST
+SMTP_PORT
+SMTP_SECURE
+SMTP_USER
+SMTP_PASS
+CONTACT_TO
+CONTACT_FROM
+```
+
+Bruk dette som utgangspunkt:
+
+```text
+SMTP_HOST = SMTP-serveren Webhuset viser for e-posten din
+SMTP_PORT = 465
+SMTP_SECURE = true
+SMTP_USER = kontakt@mustadigital.no
+SMTP_PASS = passordet til e-postkontoen
+CONTACT_TO = kontakt@mustadigital.no
+CONTACT_FROM = Musta Digital <kontakt@mustadigital.no>
+```
+
+Viktig:
+
+- Ikke skriv e-postpassordet i `index.html`.
+- Ikke skriv e-postpassordet i `script.js`.
+- Ikke legg e-postpassordet på GitHub.
+- Passordet skal bare ligge i Vercel under `Environment Variables`.
+
+Når du har lagt inn dette:
+
+1. Gå til `Deployments` i Vercel.
+2. Trykk på de tre prikkene på siste deployment.
+3. Trykk `Redeploy`.
+4. Test skjemaet på nettsiden etterpå.
+
+Hvis skjemaet sier at det mangler e-postoppsett, betyr det nesten alltid at én av miljøvariablene mangler eller er skrevet feil.
+
+## 10. Slik kobler du til eget domene
 
 Når du har kjøpt et domene, for eksempel `mustadigital.no`, gjør du dette:
 
@@ -185,7 +243,7 @@ mustadigital.no skal peke til Vercel
 
 Når DNS er riktig, blir nettsiden synlig på ditt eget domene.
 
-## 10. Slik jobber du videre etter publisering
+## 11. Slik jobber du videre etter publisering
 
 Når du vil endre nettsiden:
 
@@ -205,7 +263,7 @@ Kort sagt:
 Endre i VS Code -> send til GitHub -> Vercel oppdaterer nettsiden
 ```
 
-## 11. Hva du kan si til bedrifter
+## 12. Hva du kan si til bedrifter
 
 Du kan bruke dette som en enkel salgstekst når du kontakter bedrifter:
 
@@ -219,7 +277,7 @@ Målet er at kunder lettere skal finne dere, forstå hva dere tilbyr og ta konta
 Vi kan gjerne sende en gratis vurdering av hva dere bør ha på en enkel nettside.
 ```
 
-## 12. Hva du bør gjøre først
+## 13. Hva du bør gjøre først
 
 Gjør dette i denne rekkefølgen:
 
@@ -229,9 +287,10 @@ Gjør dette i denne rekkefølgen:
 4. Åpne siden lokalt og sjekk mobilvisning.
 5. Legg prosjektet på GitHub.
 6. Publiser på Vercel.
-7. Koble til domene når du er klar.
+7. Legg inn miljøvariabler for kontaktskjemaet i Vercel.
+8. Koble til domene når du er klar.
 
-## 13. Ikke vær redd for dette
+## 14. Ikke vær redd for dette
 
 Du trenger ikke forstå alt med en gang.
 

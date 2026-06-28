@@ -869,6 +869,13 @@ h3 {
   gap: 0.45rem;
 }
 
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .full-row,
 .contact-form .button,
 .form-status {
@@ -913,6 +920,11 @@ textarea:focus {
 
 textarea::placeholder {
   color: rgba(179, 184, 197, 0.74);
+}
+
+.contact-form .button:disabled {
+  cursor: wait;
+  opacity: 0.72;
 }
 
 .form-status {
