@@ -59,11 +59,14 @@
                 <p class="eyebrow">Kundepanel</p>
                 <h1>Alle kunder</h1>
               </div>
-              <form class="admin-search" data-search-form>
-                <label class="sr-only" for="admin-search">Søk kunder</label>
-                <input id="admin-search" name="q" type="search" placeholder="Søk firma, navn, e-post...">
-                <button class="button primary" type="submit"><span>Søk</span></button>
-              </form>
+              <div class="admin-actions">
+                <form class="admin-search" data-search-form>
+                  <label class="sr-only" for="admin-search">Søk kunder</label>
+                  <input id="admin-search" name="q" type="search" placeholder="Søk firma, navn, e-post...">
+                  <button class="button primary" type="submit"><span>Søk</span></button>
+                </form>
+                <button class="button ghost admin-logout" type="button" data-logout-button><span>Logg ut</span></button>
+              </div>
             </header>
 
             <section class="admin-stats" aria-label="Oversikt">

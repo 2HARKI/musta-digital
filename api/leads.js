@@ -1,4 +1,4 @@
-const { clean, listLeads } = require("./_crm");
+const { clean, listLeads, updateLead } = require("./_crm");
 
 function getBearerToken(req) {
   const header = clean(req.headers.authorization, 500);
@@ -29,9 +29,9 @@ function supabaseMessage(error) {
 }
 
 module.exports = async function handler(req, res) {
-  if (req.method !== "GET") {
-    res.setHeader("Allow", "GET");
-    return res.status(405).json({ message: "Kun GET er tillatt." });
+  if (!["GET", "PATCH"].includes(req.method)) {
+    res.setHeader("Allow", "GET, PATCH");
+    return res.status(405).json({ message: "Kun GET og PATCH er tillatt." });
   }
 
   const adminToken = clean(process.env.ADMIN_TOKEN, 500);
@@ -44,6 +44,30 @@ module.exports = async function handler(req, res) {
   }
 
   try {
+    if (req.method === "PATCH") {
+      const body = req.body || {};
+      const id = clean(body.id, 80);
+      const action = clean(body.action, 40);
+      const now = new Date().toISOString();
+      const actions = {
+        contacted: { status: "contacted", last_contacted_at: now },
+        customer: { status: "customer", is_customer: true, last_contacted_at: now },
+        archived: { status: "archived" }
+      };
+
+      if (!id || !actions[action]) {
+        return res.status(400).json({ message: "Mangler gyldig kunde eller handling." });
+      }
+
+      const result = await updateLead(id, actions[action]);
+
+      if (!result.configured) {
+        return res.status(503).json({ message: "Database mangler Supabase-oppsett i Vercel." });
+      }
+
+      return res.status(200).json({ lead: result.lead });
+    }
+
     const result = await listLeads({
       q: clean(req.query?.q, 120),
       status: clean(req.query?.status, 40),

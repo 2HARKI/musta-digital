@@ -3,6 +3,7 @@ const dashboard = document.querySelector("[data-dashboard]");
 const loginForm = document.querySelector("[data-login-form]");
 const loginStatus = document.querySelector("[data-login-status]");
 const searchForm = document.querySelector("[data-search-form]");
+const logoutButton = document.querySelector("[data-logout-button]");
 const statusText = document.querySelector("[data-leads-status]");
 const results = document.querySelector("[data-leads-results]");
 const totalCount = document.querySelector("[data-total-count]");
@@ -27,8 +28,13 @@ function formatDate(value) {
 }
 
 function customerCard(lead) {
+  const id = escapeHtml(lead.id || "");
+  const status = lead.status || "new";
+  const isCustomer = lead.is_customer || status === "customer";
+  const isArchived = status === "archived";
+
   return `
-    <article class="customer-card">
+    <article class="customer-card" data-lead-id="${id}">
       <div class="customer-card-head">
         <div>
           <h2>${escapeHtml(lead.company || lead.name || "Ukjent kunde")}</h2>
@@ -44,6 +50,11 @@ function customerCard(lead) {
       </dl>
       <p>${escapeHtml(lead.message || "Ingen melding.")}</p>
       ${lead.notes ? `<p class="customer-note">${escapeHtml(lead.notes)}</p>` : ""}
+      <div class="customer-actions" aria-label="Handlinger for ${escapeHtml(lead.company || lead.name || "kunde")}">
+        <button type="button" data-lead-id="${id}" data-lead-action="contacted" ${status === "contacted" || isCustomer || isArchived ? "disabled" : ""}>Kontaktet</button>
+        <button type="button" data-lead-id="${id}" data-lead-action="customer" ${isCustomer || isArchived ? "disabled" : ""}>Kunde</button>
+        <button type="button" data-lead-id="${id}" data-lead-action="archived" ${isArchived ? "disabled" : ""}>Arkiver</button>
+      </div>
     </article>
   `;
 }
@@ -59,7 +70,9 @@ function setLoggedIn(isLoggedIn) {
 }
 
 function statusLabel(lead) {
+  if (lead.status === "archived") return "Arkivert";
   if (lead.is_customer) return "Kunde";
+  if (lead.status === "customer") return "Kunde";
   if (lead.status === "contacted") return "Kontaktet";
   if (lead.status === "closed") return "Avsluttet";
   return "Ny";
@@ -69,6 +82,17 @@ function updateStats(leads) {
   if (totalCount) totalCount.textContent = String(leads.length);
   if (newCount) newCount.textContent = String(leads.filter((lead) => (lead.status || "new") === "new").length);
   if (customerCount) customerCount.textContent = String(leads.filter((lead) => lead.is_customer || lead.status === "customer").length);
+}
+
+function logout() {
+  sessionStorage.removeItem("mustaAdminToken");
+  if (loginForm) loginForm.reset();
+  if (searchForm) searchForm.reset();
+  if (loginStatus) loginStatus.textContent = "";
+  if (statusText) statusText.textContent = "";
+  if (results) results.innerHTML = "";
+  updateStats([]);
+  setLoggedIn(false);
 }
 
 async function fetchJson(url, options = {}, timeoutMs = 12000) {
@@ -164,12 +188,64 @@ async function loadCustomers(event) {
   }
 }
 
+async function updateLeadStatus(event) {
+  const button = event.target.closest("[data-lead-action]");
+  if (!button) return;
+
+  const token = getToken();
+  const id = button.dataset.leadId || "";
+  const action = button.dataset.leadAction || "";
+
+  if (!token) {
+    logout();
+    return;
+  }
+
+  button.disabled = true;
+  statusText.textContent = "Oppdaterer kunde...";
+
+  try {
+    const { response, body } = await fetchJson("/api/leads", {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ id, action })
+    });
+
+    if (response.status === 401) {
+      logout();
+      throw new Error("Du må logge inn på nytt.");
+    }
+
+    if (!response.ok) {
+      throw new Error(body.message || "Kunne ikke oppdatere kunden.");
+    }
+
+    await loadCustomers();
+  } catch (error) {
+    statusText.textContent = error.name === "AbortError"
+      ? "Oppdateringen tok for lang tid. Prøv igjen."
+      : error.message;
+    button.disabled = false;
+  }
+}
+
 if (loginForm) {
   loginForm.addEventListener("submit", login);
 }
 
 if (searchForm) {
   searchForm.addEventListener("submit", loadCustomers);
+}
+
+if (logoutButton) {
+  logoutButton.addEventListener("click", logout);
+}
+
+if (results) {
+  results.addEventListener("click", updateLeadStatus);
 }
 
 if (getToken()) {

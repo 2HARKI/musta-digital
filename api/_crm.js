@@ -174,8 +174,44 @@ async function listLeads({ q = "", status = "", limit = 50 } = {}) {
   };
 }
 
+async function updateLead(id, updates) {
+  const config = getSupabaseConfig();
+
+  if (!config) {
+    return { ok: false, configured: false, lead: null };
+  }
+
+  assertServerKey(config);
+
+  const safeId = clean(id, 80);
+  const response = await fetchWithTimeout(
+    `${config.url}/rest/v1/leads?id=eq.${encodeURIComponent(safeId)}`,
+    {
+      method: "PATCH",
+      headers: supabaseHeaders(config, {
+        "Content-Type": "application/json",
+        Prefer: "return=representation"
+      }),
+      body: JSON.stringify(updates)
+    }
+  );
+
+  if (!response.ok) {
+    const details = await response.text().catch(() => "");
+    throw supabaseError("update", response, details);
+  }
+
+  const rows = await response.json().catch(() => []);
+  return {
+    ok: true,
+    configured: true,
+    lead: rows[0] || null
+  };
+}
+
 module.exports = {
   clean,
   insertLead,
-  listLeads
+  listLeads,
+  updateLead
 };

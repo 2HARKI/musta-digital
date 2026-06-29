@@ -1164,12 +1164,24 @@ textarea::placeholder {
   font-size: 2.2rem;
 }
 
+.admin-actions {
+  width: min(100%, 620px);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.65rem;
+  align-items: center;
+}
+
 .admin-search {
-  width: min(100%, 460px);
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 0.6rem;
   align-items: center;
+}
+
+.admin-logout {
+  min-height: 44px;
+  white-space: nowrap;
 }
 
 .sr-only {
@@ -1267,6 +1279,34 @@ textarea::placeholder {
   margin-top: 0.75rem !important;
   padding-top: 0.75rem;
   border-top: 1px solid var(--line);
+}
+
+.customer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--line);
+}
+
+.customer-actions button {
+  min-height: 38px;
+  padding: 0.5rem 0.7rem;
+  color: var(--white);
+  border: 1px solid rgba(66, 165, 255, 0.36);
+  border-radius: var(--radius);
+  background: rgba(21, 101, 255, 0.14);
+  font-weight: 820;
+}
+
+.customer-actions button:hover {
+  background: rgba(21, 101, 255, 0.24);
+}
+
+.customer-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
 }
 
 .site-footer {
@@ -1499,6 +1539,7 @@ textarea::placeholder {
     flex-direction: column;
   }
 
+  .admin-actions,
   .admin-search,
   .admin-stats,
   .customer-card dl {
