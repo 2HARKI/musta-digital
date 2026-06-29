@@ -4,7 +4,10 @@ function clean(value, maxLength = 2000) {
 
 function getSupabaseConfig() {
   const url = clean(process.env.SUPABASE_URL, 500).replace(/\/$/, "");
-  const key = clean(process.env.SUPABASE_SERVICE_ROLE_KEY, 2000);
+  const key = clean(
+    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY,
+    2000
+  );
 
   if (!url || !key) {
     return null;

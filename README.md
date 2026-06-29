@@ -39,6 +39,7 @@ Kontaktskjemaet kan også lagre henvendelser i Supabase, slik at du kan søke i 
 
 - `SUPABASE_URL` - prosjekt-URL fra Supabase
 - `SUPABASE_SERVICE_ROLE_KEY` - service role key fra Supabase, aldri legg denne i frontend
+- `SERVICE_ROLE_KEY` - støttes også hvis du allerede har brukt dette navnet i Vercel
 - `ADMIN_TOKEN` - et langt hemmelig passord for adminpanelet
 
 Kundepanelet ligger på `/admin/`. Det har egen innlogging, er satt til `noindex`, og API-et krever `ADMIN_TOKEN`.
