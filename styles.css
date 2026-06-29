@@ -1304,6 +1304,16 @@ textarea::placeholder {
   background: rgba(21, 101, 255, 0.24);
 }
 
+.customer-actions button.danger {
+  margin-left: auto;
+  border-color: rgba(255, 102, 102, 0.42);
+  background: rgba(255, 82, 82, 0.12);
+}
+
+.customer-actions button.danger:hover {
+  background: rgba(255, 82, 82, 0.22);
+}
+
 .customer-actions button:disabled {
   cursor: not-allowed;
   opacity: 0.48;

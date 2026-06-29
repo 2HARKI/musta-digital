@@ -1,4 +1,4 @@
-const { clean, listLeads, updateLead } = require("./_crm");
+const { clean, deleteLead, listLeads, updateLead } = require("./_crm");
 
 function getBearerToken(req) {
   const header = clean(req.headers.authorization, 500);
@@ -29,9 +29,9 @@ function supabaseMessage(error) {
 }
 
 module.exports = async function handler(req, res) {
-  if (!["GET", "PATCH"].includes(req.method)) {
-    res.setHeader("Allow", "GET, PATCH");
-    return res.status(405).json({ message: "Kun GET og PATCH er tillatt." });
+  if (!["GET", "PATCH", "DELETE"].includes(req.method)) {
+    res.setHeader("Allow", "GET, PATCH, DELETE");
+    return res.status(405).json({ message: "Kun GET, PATCH og DELETE er tillatt." });
   }
 
   const adminToken = clean(process.env.ADMIN_TOKEN, 500);
@@ -66,6 +66,22 @@ module.exports = async function handler(req, res) {
       }
 
       return res.status(200).json({ lead: result.lead });
+    }
+
+    if (req.method === "DELETE") {
+      const id = clean(req.query?.id || req.body?.id, 80);
+
+      if (!id) {
+        return res.status(400).json({ message: "Mangler kunde som skal slettes." });
+      }
+
+      const result = await deleteLead(id);
+
+      if (!result.configured) {
+        return res.status(503).json({ message: "Database mangler Supabase-oppsett i Vercel." });
+      }
+
+      return res.status(200).json({ ok: true });
     }
 
     const result = await listLeads({

@@ -54,6 +54,7 @@ function customerCard(lead) {
         <button type="button" data-lead-id="${id}" data-lead-action="contacted" ${status === "contacted" || isCustomer || isArchived ? "disabled" : ""}>Kontaktet</button>
         <button type="button" data-lead-id="${id}" data-lead-action="customer" ${isCustomer || isArchived ? "disabled" : ""}>Kunde</button>
         <button type="button" data-lead-id="${id}" data-lead-action="archived" ${isArchived ? "disabled" : ""}>Arkiver</button>
+        <button class="danger" type="button" data-lead-id="${id}" data-lead-delete="${escapeHtml(lead.company || lead.name || "kunden")}">Slett</button>
       </div>
     </article>
   `;
@@ -232,6 +233,50 @@ async function updateLeadStatus(event) {
   }
 }
 
+async function deleteCustomer(event) {
+  const button = event.target.closest("[data-lead-delete]");
+  if (!button) return;
+
+  const token = getToken();
+  const id = button.dataset.leadId || "";
+  const name = button.dataset.leadDelete || "kunden";
+
+  if (!token) {
+    logout();
+    return;
+  }
+
+  if (!window.confirm(`Slette ${name} permanent fra kundelisten?`)) {
+    return;
+  }
+
+  button.disabled = true;
+  statusText.textContent = "Sletter kunde...";
+
+  try {
+    const { response, body } = await fetchJson(`/api/leads?id=${encodeURIComponent(id)}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    if (response.status === 401) {
+      logout();
+      throw new Error("Du må logge inn på nytt.");
+    }
+
+    if (!response.ok) {
+      throw new Error(body.message || "Kunne ikke slette kunden.");
+    }
+
+    await loadCustomers();
+  } catch (error) {
+    statusText.textContent = error.name === "AbortError"
+      ? "Slettingen tok for lang tid. Prøv igjen."
+      : error.message;
+    button.disabled = false;
+  }
+}
+
 if (loginForm) {
   loginForm.addEventListener("submit", login);
 }
@@ -246,6 +291,7 @@ if (logoutButton) {
 
 if (results) {
   results.addEventListener("click", updateLeadStatus);
+  results.addEventListener("click", deleteCustomer);
 }
 
 if (getToken()) {

@@ -209,8 +209,35 @@ async function updateLead(id, updates) {
   };
 }
 
+async function deleteLead(id) {
+  const config = getSupabaseConfig();
+
+  if (!config) {
+    return { ok: false, configured: false };
+  }
+
+  assertServerKey(config);
+
+  const safeId = clean(id, 80);
+  const response = await fetchWithTimeout(
+    `${config.url}/rest/v1/leads?id=eq.${encodeURIComponent(safeId)}`,
+    {
+      method: "DELETE",
+      headers: supabaseHeaders(config)
+    }
+  );
+
+  if (!response.ok) {
+    const details = await response.text().catch(() => "");
+    throw supabaseError("delete", response, details);
+  }
+
+  return { ok: true, configured: true };
+}
+
 module.exports = {
   clean,
+  deleteLead,
   insertLead,
   listLeads,
   updateLead
