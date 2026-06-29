@@ -1303,6 +1303,10 @@ textarea::placeholder {
   outline-offset: 3px;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 @media (max-width: 1040px) {
   .header-cta {
     display: none;
