@@ -1,6 +1,13 @@
-const form = document.querySelector("[data-leads-form]");
+const loginScreen = document.querySelector("[data-login-screen]");
+const dashboard = document.querySelector("[data-dashboard]");
+const loginForm = document.querySelector("[data-login-form]");
+const loginStatus = document.querySelector("[data-login-status]");
+const searchForm = document.querySelector("[data-search-form]");
 const statusText = document.querySelector("[data-leads-status]");
 const results = document.querySelector("[data-leads-results]");
+const totalCount = document.querySelector("[data-total-count]");
+const newCount = document.querySelector("[data-new-count]");
+const customerCount = document.querySelector("[data-customer-count]");
 
 function escapeHtml(value) {
   return String(value || "")
@@ -19,15 +26,15 @@ function formatDate(value) {
   }).format(new Date(value));
 }
 
-function leadCard(lead) {
+function customerCard(lead) {
   return `
-    <article class="lead-card">
-      <div class="lead-card-head">
+    <article class="customer-card">
+      <div class="customer-card-head">
         <div>
-          <h2>${escapeHtml(lead.company || lead.name || "Ukjent lead")}</h2>
+          <h2>${escapeHtml(lead.company || lead.name || "Ukjent kunde")}</h2>
           <p>${escapeHtml(lead.name || "-")} · ${escapeHtml(lead.email || "-")}</p>
         </div>
-        <span>${escapeHtml(lead.status || "new")}</span>
+        <span>${escapeHtml(statusLabel(lead))}</span>
       </div>
       <dl>
         <div><dt>Dato</dt><dd>${formatDate(lead.created_at)}</dd></div>
@@ -36,54 +43,119 @@ function leadCard(lead) {
         <div><dt>Kilde</dt><dd>${escapeHtml(lead.source || "-")}</dd></div>
       </dl>
       <p>${escapeHtml(lead.message || "Ingen melding.")}</p>
-      ${lead.notes ? `<p class="lead-note">${escapeHtml(lead.notes)}</p>` : ""}
+      ${lead.notes ? `<p class="customer-note">${escapeHtml(lead.notes)}</p>` : ""}
     </article>
   `;
 }
 
-async function loadLeads(event) {
+function getToken() {
+  return sessionStorage.getItem("mustaAdminToken") || "";
+}
+
+function setLoggedIn(isLoggedIn) {
+  if (!loginScreen || !dashboard) return;
+  loginScreen.hidden = isLoggedIn;
+  dashboard.hidden = !isLoggedIn;
+}
+
+function statusLabel(lead) {
+  if (lead.is_customer) return "Kunde";
+  if (lead.status === "contacted") return "Kontaktet";
+  if (lead.status === "closed") return "Avsluttet";
+  return "Ny";
+}
+
+function updateStats(leads) {
+  if (totalCount) totalCount.textContent = String(leads.length);
+  if (newCount) newCount.textContent = String(leads.filter((lead) => (lead.status || "new") === "new").length);
+  if (customerCount) customerCount.textContent = String(leads.filter((lead) => lead.is_customer || lead.status === "customer").length);
+}
+
+async function login(event) {
   event.preventDefault();
 
-  const data = new FormData(form);
+  const data = new FormData(loginForm);
   const token = String(data.get("token") || "").trim();
-  const q = String(data.get("q") || "").trim();
 
   if (!token) {
-    statusText.textContent = "Skriv inn admin-token først.";
+    loginStatus.textContent = "Skriv inn passord først.";
     return;
   }
 
-  sessionStorage.setItem("mustaAdminToken", token);
-  statusText.textContent = "Henter leads...";
-  results.innerHTML = "";
+  loginStatus.textContent = "Logger inn...";
 
   try {
-    const response = await fetch(`/api/leads?q=${encodeURIComponent(q)}`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+    const response = await fetch("/api/admin-login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token })
     });
     const body = await response.json().catch(() => ({}));
 
     if (!response.ok) {
-      throw new Error(body.message || "Kunne ikke hente leads.");
+      throw new Error(body.message || "Kunne ikke logge inn.");
+    }
+
+    sessionStorage.setItem("mustaAdminToken", token);
+    setLoggedIn(true);
+    await loadCustomers();
+  } catch (error) {
+    loginStatus.textContent = error.message;
+  }
+}
+
+async function loadCustomers(event) {
+  if (event) event.preventDefault();
+
+  const token = getToken();
+  const q = searchForm ? String(new FormData(searchForm).get("q") || "").trim() : "";
+
+  if (!token) {
+    setLoggedIn(false);
+    return;
+  }
+
+  statusText.textContent = "Henter kunder...";
+  results.innerHTML = "";
+
+  try {
+    const response = await fetch(`/api/leads?q=${encodeURIComponent(q)}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const body = await response.json().catch(() => ({}));
+
+    if (response.status === 401) {
+      sessionStorage.removeItem("mustaAdminToken");
+      setLoggedIn(false);
+      throw new Error("Du må logge inn på nytt.");
+    }
+
+    if (!response.ok) {
+      throw new Error(body.message || "Kunne ikke hente kunder.");
     }
 
     const leads = body.leads || [];
+    updateStats(leads);
     statusText.textContent = leads.length
-      ? `Fant ${leads.length} henvendelse${leads.length === 1 ? "" : "r"}.`
+      ? `Viser ${leads.length} kunde${leads.length === 1 ? "" : "r"}/henvendelse${leads.length === 1 ? "" : "r"}.`
       : "Ingen treff.";
-    results.innerHTML = leads.map(leadCard).join("");
+    results.innerHTML = leads.map(customerCard).join("");
   } catch (error) {
     statusText.textContent = error.message;
   }
 }
 
-if (form) {
-  const savedToken = sessionStorage.getItem("mustaAdminToken");
-  if (savedToken) {
-    form.elements.token.value = savedToken;
-  }
+if (loginForm) {
+  loginForm.addEventListener("submit", login);
+}
 
-  form.addEventListener("submit", loadLeads);
+if (searchForm) {
+  searchForm.addEventListener("submit", loadCustomers);
+}
+
+if (getToken()) {
+  setLoggedIn(true);
+  loadCustomers();
+} else {
+  setLoggedIn(false);
 }
