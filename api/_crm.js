@@ -3,22 +3,22 @@ function clean(value, maxLength = 2000) {
 }
 
 function getSupabaseConfig() {
-  const url = clean(process.env.SUPABASE_URL, 500).replace(/\/$/, "");
+  const rawUrl = clean(process.env.SUPABASE_URL, 500).replace(/\/$/, "");
   const key = clean(
     process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY,
     2000
   );
 
-  if (!url || !key) {
+  if (!rawUrl || !key) {
     return null;
   }
 
-  assertSupabaseUrl(url);
+  const url = normalizeSupabaseUrl(rawUrl);
 
   return { url, key, keyRole: getKeyRole(key) };
 }
 
-function assertSupabaseUrl(url) {
+function normalizeSupabaseUrl(url) {
   if (url.startsWith("sb_") || url.startsWith("eyJ")) {
     throw supabaseConfigError("SUPABASE_URL er satt til en key. Bruk Supabase Project URL, for eksempel https://prosjektref.supabase.co.");
   }
@@ -28,8 +28,19 @@ function assertSupabaseUrl(url) {
     if (parsed.protocol !== "https:" || !parsed.hostname) {
       throw new Error("Invalid Supabase URL");
     }
+
+    if (parsed.pathname === "/rest/v1") {
+      parsed.pathname = "";
+      return parsed.toString().replace(/\/$/, "");
+    }
+
+    if (parsed.pathname && parsed.pathname !== "/") {
+      throw new Error("Invalid Supabase URL path");
+    }
+
+    return parsed.toString().replace(/\/$/, "");
   } catch (error) {
-    throw supabaseConfigError("SUPABASE_URL er ikke en gyldig URL. Den skal starte med https:// og ende omtrent med .supabase.co.");
+    throw supabaseConfigError("SUPABASE_URL er ikke en gyldig Supabase URL. Bruk https://prosjektref.supabase.co, ikke API URL med /rest/v1/.");
   }
 }
 
