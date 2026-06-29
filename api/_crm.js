@@ -13,7 +13,38 @@ function getSupabaseConfig() {
     return null;
   }
 
-  return { url, key };
+  assertSupabaseUrl(url);
+
+  return { url, key, keyRole: getKeyRole(key) };
+}
+
+function assertSupabaseUrl(url) {
+  if (url.startsWith("sb_") || url.startsWith("eyJ")) {
+    throw supabaseConfigError("SUPABASE_URL er satt til en key. Bruk Supabase Project URL, for eksempel https://prosjektref.supabase.co.");
+  }
+
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== "https:" || !parsed.hostname) {
+      throw new Error("Invalid Supabase URL");
+    }
+  } catch (error) {
+    throw supabaseConfigError("SUPABASE_URL er ikke en gyldig URL. Den skal starte med https:// og ende omtrent med .supabase.co.");
+  }
+}
+
+function getKeyRole(key) {
+  const parts = key.split(".");
+  if (parts.length < 2) {
+    return "";
+  }
+
+  try {
+    const payload = JSON.parse(Buffer.from(parts[1], "base64url").toString("utf8"));
+    return clean(payload.role, 80);
+  } catch (error) {
+    return "";
+  }
 }
 
 function supabaseHeaders(config, extra = {}) {
@@ -31,6 +62,19 @@ function supabaseError(operation, response, details) {
   error.status = response.status;
   error.details = clean(details, 700);
   return error;
+}
+
+function supabaseConfigError(message) {
+  const error = new Error(message);
+  error.name = "SupabaseConfigError";
+  error.details = message;
+  return error;
+}
+
+function assertServerKey(config) {
+  if (config.keyRole && config.keyRole !== "service_role") {
+    throw supabaseConfigError(`SERVICE_ROLE_KEY ser ut som en ${config.keyRole}-key. Bruk service_role secret key fra Supabase.`);
+  }
 }
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = 10000) {
@@ -53,6 +97,8 @@ async function insertLead(lead) {
   if (!config) {
     return { ok: false, configured: false };
   }
+
+  assertServerKey(config);
 
   const response = await fetchWithTimeout(
     `${config.url}/rest/v1/leads`,
@@ -81,6 +127,8 @@ async function listLeads({ q = "", status = "", limit = 50 } = {}) {
   if (!config) {
     return { ok: false, configured: false, leads: [] };
   }
+
+  assertServerKey(config);
 
   const params = new URLSearchParams();
   params.set("select", "id,created_at,source,status,name,email,phone,company,service,message,notes,is_customer,last_contacted_at");

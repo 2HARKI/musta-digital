@@ -65,6 +65,10 @@ module.exports = async function handler(req, res) {
       return res.status(502).json({ message: supabaseMessage(error) });
     }
 
+    if (error.name === "SupabaseConfigError") {
+      return res.status(503).json({ message: error.details });
+    }
+
     const details = clean(error.message, 500);
     return res.status(500).json({
       message: details
