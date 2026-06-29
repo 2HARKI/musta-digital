@@ -28,12 +28,37 @@ Skjemaet sender til `/api/contact` og bruker SMTP fra e-postleverandøren din. L
 
 Ikke legg passordet inn i GitHub eller kodefilene.
 
+## CRM og database
+
+Kontaktskjemaet kan også lagre henvendelser i Supabase, slik at du kan søke i leads og tidligere kunder.
+
+1. Opprett et Supabase-prosjekt.
+2. Gå til SQL Editor i Supabase.
+3. Kjør innholdet i `database/supabase-schema.sql`.
+4. Legg disse inn i Vercel under `Settings` -> `Environment Variables`:
+
+- `SUPABASE_URL` - prosjekt-URL fra Supabase
+- `SUPABASE_SERVICE_ROLE_KEY` - service role key fra Supabase, aldri legg denne i frontend
+- `ADMIN_TOKEN` - et langt hemmelig passord for adminpanelet
+
+Adminpanelet ligger på `/admin/`. Det er satt til `noindex`, og API-et krever `ADMIN_TOKEN`.
+
+Direkte e-post til `kontakt@mustadigital.no` lagres ikke automatisk i CRM-et ennå. Starten er kontaktskjema -> database. Direkte e-post kan kobles på senere med videresending, IMAP eller en e-postintegrasjon.
+
+## Personvern
+
+Siden har en personvernerklæring på `/personvern/`. Oppdater den hvis systemer, leverandører eller måten du behandler kundeopplysninger på endres.
+
 ## Filer
 
 - `index.html` - struktur og tekst
 - `styles.css` - design og responsiv layout
 - `script.js` - mobilmeny og innsending av kontaktskjema
 - `api/contact.js` - Vercel-funksjon som sender skjemaet til e-post
+- `api/leads.js` - privat API for å søke i leads
+- `api/_crm.js` - felles databasehjelpere for CRM
+- `admin/` - privat søkepanel for leads
+- `database/supabase-schema.sql` - databaseoppsett for Supabase
 - `package.json` - forteller Vercel at prosjektet bruker `nodemailer`
 - Vercel Analytics er lagt inn i `index.html`
 - `assets/logo.svg` - enkel logo basert på Musta Digital-stilen

@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const { insertLead } = require("./_crm");
 
 function clean(value, maxLength = 2000) {
   return String(value || "").trim().slice(0, maxLength);
@@ -22,6 +23,7 @@ module.exports = async function handler(req, res) {
   const body = req.body || {};
   const name = clean(body.name, 120);
   const email = clean(body.email, 180);
+  const phone = clean(body.phone, 80);
   const company = clean(body.company, 160);
   const service = clean(body.service, 160);
   const message = clean(body.message, 4000);
@@ -56,9 +58,31 @@ module.exports = async function handler(req, res) {
   }
 
   const subject = `Ny foresporsel fra ${company || name}`;
+  const lead = {
+    source: "contact_form",
+    status: "new",
+    name,
+    email,
+    phone: phone || null,
+    company: company || null,
+    service: service || null,
+    message: message || null,
+    metadata: {
+      privacy_version: "2026-06-29",
+      user_agent: clean(req.headers["user-agent"], 500) || null
+    }
+  };
+
+  try {
+    await insertLead(lead);
+  } catch (error) {
+    console.error("Lead database insert failed", error);
+  }
+
   const text = [
     `Navn: ${name}`,
     `E-post: ${email}`,
+    `Telefon: ${phone || "-"}`,
     `Bedrift: ${company || "-"}`,
     `Tjeneste: ${service || "-"}`,
     "",
@@ -70,6 +94,7 @@ module.exports = async function handler(req, res) {
     <h2>Ny foresporsel fra nettsiden</h2>
     <p><strong>Navn:</strong> ${escapeHtml(name)}</p>
     <p><strong>E-post:</strong> ${escapeHtml(email)}</p>
+    <p><strong>Telefon:</strong> ${escapeHtml(phone || "-")}</p>
     <p><strong>Bedrift:</strong> ${escapeHtml(company || "-")}</p>
     <p><strong>Tjeneste:</strong> ${escapeHtml(service || "-")}</p>
     <p><strong>Melding:</strong></p>

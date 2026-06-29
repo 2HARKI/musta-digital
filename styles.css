@@ -952,6 +952,7 @@ a.service-card:focus-visible {
 
 .full-row,
 .contact-form .button,
+.privacy-note,
 .form-status {
   grid-column: 1 / -1;
 }
@@ -1006,6 +1007,144 @@ textarea::placeholder {
   margin: 0;
   color: var(--green-300);
   line-height: 1.5;
+}
+
+.privacy-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.privacy-note a,
+.privacy-content a {
+  color: var(--blue-400);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.privacy-content {
+  max-width: 880px;
+}
+
+.privacy-content .content-panel {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.privacy-content h2 {
+  margin-top: 1.35rem;
+}
+
+.privacy-content h2:first-child {
+  margin-top: 0;
+}
+
+.admin-main .subpage-hero {
+  padding-block: 4.5rem 3rem;
+}
+
+.admin-nav {
+  margin-left: auto;
+}
+
+.admin-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-toolbar {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.75fr) minmax(240px, 1.25fr) auto;
+  gap: 0.8rem;
+  align-items: end;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(10, 24, 48, 0.88);
+}
+
+.admin-toolbar label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 760;
+}
+
+.admin-toolbar input {
+  min-height: 44px;
+  width: 100%;
+  padding: 0.7rem 0.8rem;
+  color: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.lead-results {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.lead-card {
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(10, 24, 48, 0.92), rgba(6, 16, 38, 0.84));
+}
+
+.lead-card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.lead-card h2 {
+  font-size: 1.15rem;
+}
+
+.lead-card p,
+.lead-card dd {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.lead-card dl {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin: 0.85rem 0;
+}
+
+.lead-card dt {
+  color: var(--blue-400);
+  font-size: 0.75rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.lead-card dd,
+.lead-card p {
+  margin: 0;
+}
+
+.lead-card-head span {
+  align-self: start;
+  padding: 0.3rem 0.5rem;
+  color: var(--white);
+  border: 1px solid rgba(99, 243, 177, 0.35);
+  border-radius: var(--radius);
+  background: rgba(99, 243, 177, 0.1);
+  font-size: 0.78rem;
+  font-weight: 820;
+}
+
+.lead-note {
+  margin-top: 0.75rem !important;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
 }
 
 .site-footer {
@@ -1212,6 +1351,22 @@ textarea::placeholder {
   .footer-grid {
     grid-template-columns: 1fr;
     padding-block: 1.5rem;
+  }
+
+  .admin-toolbar,
+  .lead-card dl {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-nav {
+    position: static;
+    display: flex;
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+    padding: 0;
+    border-bottom: 0;
+    background: transparent;
   }
 }
 

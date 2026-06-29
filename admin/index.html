@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="no">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin | Musta Digital</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#08172F">
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Hopp til innhold</a>
+    <header class="site-header is-scrolled" data-header>
+      <nav class="nav-shell" aria-label="Hovedmeny">
+        <a class="brand" href="/" aria-label="Musta Digital hjem">
+          <img src="/assets/logo.svg" alt="Musta Digital">
+        </a>
+        <div class="nav-links admin-nav">
+          <a href="/">Forside</a>
+          <a href="/personvern/">Personvern</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="main" class="subpage-main admin-main">
+      <section class="subpage-hero">
+        <div class="container">
+          <p class="eyebrow">Privat CRM</p>
+          <h1>Leads og kunder</h1>
+          <p class="hero-lead">Søk i henvendelser fra kontaktskjemaet. Direkte e-post kan kobles på senere via forwarding eller e-postintegrasjon.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container admin-panel">
+          <form class="admin-toolbar" data-leads-form>
+            <label>
+              <span>Admin-token</span>
+              <input name="token" type="password" autocomplete="current-password" placeholder="Lim inn ADMIN_TOKEN">
+            </label>
+            <label>
+              <span>Søk</span>
+              <input name="q" type="search" placeholder="Søk navn, firma, e-post, tjeneste eller melding">
+            </label>
+            <button class="button primary" type="submit"><span>Søk</span></button>
+          </form>
+          <p class="form-status" data-leads-status role="status" aria-live="polite"></p>
+          <div class="lead-results" data-leads-results></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/admin/admin.js"></script>
+  </body>
+</html>
