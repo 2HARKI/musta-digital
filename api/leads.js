@@ -9,6 +9,25 @@ function getBearerToken(req) {
   return clean(req.query?.token, 500);
 }
 
+function supabaseMessage(error) {
+  const status = error.status ? `Supabase-feil ${error.status}` : "Supabase-feil";
+  const details = clean(error.details, 500);
+
+  if (error.status === 401 || error.status === 403) {
+    return `${status}: nøkkelen mangler tilgang. Sjekk at SERVICE_ROLE_KEY er service_role key, ikke anon/public key.`;
+  }
+
+  if (error.status === 404) {
+    return `${status}: fant ikke leads-tabellen. Kjør database/supabase-schema.sql i SQL Editor.`;
+  }
+
+  if (details) {
+    return `${status}: ${details}`;
+  }
+
+  return `${status}: ukjent svar fra Supabase.`;
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== "GET") {
     res.setHeader("Allow", "GET");
@@ -42,19 +61,15 @@ module.exports = async function handler(req, res) {
       return res.status(504).json({ message: "Databasen brukte for lang tid på å svare. Sjekk Supabase URL og service role key." });
     }
 
-    const details = error.message || "";
-    if (details.includes("Supabase select failed: 401") || details.includes("Supabase select failed: 403")) {
-      return res.status(502).json({ message: "Supabase nekter tilgang. Sjekk at SERVICE_ROLE_KEY er service_role key, ikke anon/public key." });
+    if (error.name === "SupabaseError") {
+      return res.status(502).json({ message: supabaseMessage(error) });
     }
 
-    if (details.includes("Supabase select failed: 404")) {
-      return res.status(502).json({ message: "Fant ikke leads-tabellen i Supabase. Kjør database/supabase-schema.sql i SQL Editor." });
-    }
-
-    if (details.includes("Supabase select failed: 400")) {
-      return res.status(502).json({ message: "Supabase-spørringen feilet. Sjekk at leads-tabellen har riktig kolonner." });
-    }
-
-    return res.status(500).json({ message: "Kunne ikke hente leads akkurat na. Sjekk Vercel Logs for Supabase-feilen." });
+    const details = clean(error.message, 500);
+    return res.status(500).json({
+      message: details
+        ? `Kunne ikke hente leads akkurat na: ${details}`
+        : "Kunne ikke hente leads akkurat na. Sjekk Vercel Logs for Supabase-feilen."
+    });
   }
 };

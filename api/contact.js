@@ -73,12 +73,6 @@ module.exports = async function handler(req, res) {
     }
   };
 
-  try {
-    await insertLead(lead);
-  } catch (error) {
-    console.error("Lead database insert failed", error);
-  }
-
   const text = [
     `Navn: ${name}`,
     `E-post: ${email}`,
@@ -120,6 +114,13 @@ module.exports = async function handler(req, res) {
       text,
       html
     });
+
+    // E-post er viktigst; databasefeil skal ikke stoppe henvendelsen.
+    try {
+      await insertLead(lead);
+    } catch (error) {
+      console.error("Lead database insert failed", error);
+    }
 
     return res.status(200).json({ ok: true });
   } catch (error) {

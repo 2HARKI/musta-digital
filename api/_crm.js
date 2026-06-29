@@ -24,6 +24,15 @@ function supabaseHeaders(config, extra = {}) {
   };
 }
 
+function supabaseError(operation, response, details) {
+  const error = new Error(`Supabase ${operation} failed`);
+  error.name = "SupabaseError";
+  error.operation = operation;
+  error.status = response.status;
+  error.details = clean(details, 700);
+  return error;
+}
+
 async function fetchWithTimeout(url, options = {}, timeoutMs = 10000) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
@@ -45,18 +54,22 @@ async function insertLead(lead) {
     return { ok: false, configured: false };
   }
 
-  const response = await fetchWithTimeout(`${config.url}/rest/v1/leads`, {
-    method: "POST",
-    headers: supabaseHeaders(config, {
-      "Content-Type": "application/json",
-      Prefer: "return=minimal"
-    }),
-    body: JSON.stringify(lead)
-  });
+  const response = await fetchWithTimeout(
+    `${config.url}/rest/v1/leads`,
+    {
+      method: "POST",
+      headers: supabaseHeaders(config, {
+        "Content-Type": "application/json",
+        Prefer: "return=minimal"
+      }),
+      body: JSON.stringify(lead)
+    },
+    5000
+  );
 
   if (!response.ok) {
     const details = await response.text().catch(() => "");
-    throw new Error(`Supabase insert failed: ${response.status} ${details}`);
+    throw supabaseError("insert", response, details);
   }
 
   return { ok: true, configured: true };
@@ -92,7 +105,7 @@ async function listLeads({ q = "", status = "", limit = 50 } = {}) {
 
   if (!response.ok) {
     const details = await response.text().catch(() => "");
-    throw new Error(`Supabase select failed: ${response.status} ${details}`);
+    throw supabaseError("select", response, details);
   }
 
   return {
