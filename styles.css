@@ -528,6 +528,12 @@ h3 {
   padding: 1.45rem;
 }
 
+a.service-card:hover,
+a.service-card:focus-visible {
+  border-color: rgba(66, 165, 255, 0.7);
+  transform: translateY(-3px);
+}
+
 .service-card-main {
   border-color: rgba(66, 165, 255, 0.56);
   background:
