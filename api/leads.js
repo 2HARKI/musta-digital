@@ -42,6 +42,19 @@ module.exports = async function handler(req, res) {
       return res.status(504).json({ message: "Databasen brukte for lang tid på å svare. Sjekk Supabase URL og service role key." });
     }
 
-    return res.status(500).json({ message: "Kunne ikke hente leads akkurat na." });
+    const details = error.message || "";
+    if (details.includes("Supabase select failed: 401") || details.includes("Supabase select failed: 403")) {
+      return res.status(502).json({ message: "Supabase nekter tilgang. Sjekk at SERVICE_ROLE_KEY er service_role key, ikke anon/public key." });
+    }
+
+    if (details.includes("Supabase select failed: 404")) {
+      return res.status(502).json({ message: "Fant ikke leads-tabellen i Supabase. Kjør database/supabase-schema.sql i SQL Editor." });
+    }
+
+    if (details.includes("Supabase select failed: 400")) {
+      return res.status(502).json({ message: "Supabase-spørringen feilet. Sjekk at leads-tabellen har riktig kolonner." });
+    }
+
+    return res.status(500).json({ message: "Kunne ikke hente leads akkurat na. Sjekk Vercel Logs for Supabase-feilen." });
   }
 };
