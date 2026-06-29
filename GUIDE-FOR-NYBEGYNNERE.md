@@ -263,7 +263,21 @@ Kort sagt:
 Endre i VS Code -> send til GitHub -> Vercel oppdaterer nettsiden
 ```
 
-## 12. Hva du kan si til bedrifter
+## 12. Vercel Analytics
+
+Vercel Analytics er lagt inn i nettsiden. Det betyr at du kan se besøk og sidevisninger i Vercel.
+
+Etter at du har pushet endringen til GitHub og Vercel har deployet på nytt:
+
+1. Gå til Vercel.
+2. Åpne prosjektet `musta-digital`.
+3. Gå til `Analytics`.
+4. Besøk nettsiden din selv én gang.
+5. Vent litt og oppdater Analytics-siden.
+
+Hvis du ikke ser tall med én gang, vent litt. Vercel kan bruke litt tid før data vises.
+
+## 13. Hva du kan si til bedrifter
 
 Du kan bruke dette som en enkel salgstekst når du kontakter bedrifter:
 
@@ -277,7 +291,7 @@ Målet er at kunder lettere skal finne dere, forstå hva dere tilbyr og ta konta
 Vi kan gjerne sende en gratis vurdering av hva dere bør ha på en enkel nettside.
 ```
 
-## 13. Hva du bør gjøre først
+## 14. Hva du bør gjøre først
 
 Gjør dette i denne rekkefølgen:
 
@@ -290,7 +304,7 @@ Gjør dette i denne rekkefølgen:
 7. Legg inn miljøvariabler for kontaktskjemaet i Vercel.
 8. Koble til domene når du er klar.
 
-## 14. Ikke vær redd for dette
+## 15. Ikke vær redd for dette
 
 Du trenger ikke forstå alt med en gang.
 

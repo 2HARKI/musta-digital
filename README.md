@@ -35,6 +35,7 @@ Ikke legg passordet inn i GitHub eller kodefilene.
 - `script.js` - mobilmeny og innsending av kontaktskjema
 - `api/contact.js` - Vercel-funksjon som sender skjemaet til e-post
 - `package.json` - forteller Vercel at prosjektet bruker `nodemailer`
+- Vercel Analytics er lagt inn i `index.html`
 - `assets/logo.svg` - enkel logo basert på Musta Digital-stilen
 - `assets/favicon.svg` - ikon til nettleserfanen
 - `assets/hero-devices-clean.png` - hero-bilde laget for siden
