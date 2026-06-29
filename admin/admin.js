@@ -71,6 +71,22 @@ function updateStats(leads) {
   if (customerCount) customerCount.textContent = String(leads.filter((lead) => lead.is_customer || lead.status === "customer").length);
 }
 
+async function fetchJson(url, options = {}, timeoutMs = 12000) {
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+    const body = await response.json().catch(() => ({}));
+    return { response, body };
+  } finally {
+    window.clearTimeout(timeout);
+  }
+}
+
 async function login(event) {
   event.preventDefault();
 
@@ -85,22 +101,24 @@ async function login(event) {
   loginStatus.textContent = "Logger inn...";
 
   try {
-    const response = await fetch("/api/admin-login", {
+    const { response, body } = await fetchJson("/api/admin-login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token })
     });
-    const body = await response.json().catch(() => ({}));
 
     if (!response.ok) {
       throw new Error(body.message || "Kunne ikke logge inn.");
     }
 
     sessionStorage.setItem("mustaAdminToken", token);
+    loginStatus.textContent = "";
     setLoggedIn(true);
-    await loadCustomers();
+    loadCustomers();
   } catch (error) {
-    loginStatus.textContent = error.message;
+    loginStatus.textContent = error.name === "AbortError"
+      ? "Innloggingen tok for lang tid. Prøv igjen."
+      : error.message;
   }
 }
 
@@ -119,10 +137,9 @@ async function loadCustomers(event) {
   results.innerHTML = "";
 
   try {
-    const response = await fetch(`/api/leads?q=${encodeURIComponent(q)}`, {
+    const { response, body } = await fetchJson(`/api/leads?q=${encodeURIComponent(q)}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
-    const body = await response.json().catch(() => ({}));
 
     if (response.status === 401) {
       sessionStorage.removeItem("mustaAdminToken");
@@ -141,7 +158,9 @@ async function loadCustomers(event) {
       : "Ingen treff.";
     results.innerHTML = leads.map(customerCard).join("");
   } catch (error) {
-    statusText.textContent = error.message;
+    statusText.textContent = error.name === "AbortError"
+      ? "Kundelisten brukte for lang tid. Sjekk Supabase-oppsettet i Vercel."
+      : error.message;
   }
 }
 

@@ -24,6 +24,20 @@ function supabaseHeaders(config, extra = {}) {
   };
 }
 
+async function fetchWithTimeout(url, options = {}, timeoutMs = 10000) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await fetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 async function insertLead(lead) {
   const config = getSupabaseConfig();
 
@@ -31,7 +45,7 @@ async function insertLead(lead) {
     return { ok: false, configured: false };
   }
 
-  const response = await fetch(`${config.url}/rest/v1/leads`, {
+  const response = await fetchWithTimeout(`${config.url}/rest/v1/leads`, {
     method: "POST",
     headers: supabaseHeaders(config, {
       "Content-Type": "application/json",
@@ -72,7 +86,7 @@ async function listLeads({ q = "", status = "", limit = 50 } = {}) {
     params.set("status", `eq.${cleanStatus}`);
   }
 
-  const response = await fetch(`${config.url}/rest/v1/leads?${params}`, {
+  const response = await fetchWithTimeout(`${config.url}/rest/v1/leads?${params}`, {
     headers: supabaseHeaders(config)
   });
 

@@ -38,6 +38,10 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ leads: result.leads });
   } catch (error) {
     console.error("Lead search failed", error);
+    if (error.name === "AbortError") {
+      return res.status(504).json({ message: "Databasen brukte for lang tid på å svare. Sjekk Supabase URL og service role key." });
+    }
+
     return res.status(500).json({ message: "Kunne ikke hente leads akkurat na." });
   }
 };
