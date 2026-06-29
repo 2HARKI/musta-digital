@@ -50,6 +50,19 @@ Direkte e-post til `kontakt@mustadigital.no` lagres ikke automatisk i kundepanel
 
 Siden har en personvernerklæring på `/personvern/`. Oppdater den hvis systemer, leverandører eller måten du behandler kundeopplysninger på endres.
 
+## Salg og kundeleveranser
+
+Bruk dokumentene i `docs/` før du tar inn kunder. De er laget for første fase av Musta Digital: små bedrifter, enkle nettsider, grunnleggende SEO og ryddig oppfølging.
+
+- `docs/START-HER.md` - hva som er klart nå, hva du bør selge, og hva du ikke bør love ennå
+- `docs/PRIS-OG-TILBUDSMAL.md` - enkel prismodell og tilbudsmal
+- `docs/ONBOARDING-SKJEMA.md` - spørsmål og materiell du må få fra kunden
+- `docs/KUNDEAVTALE-MAL.md` - avtaletekst du kan tilpasse per kunde
+- `docs/LEVERINGSPROSESS.md` - steg for steg fra lead til lansering
+- `docs/KUNDEMAILER-MALER.md` - meldinger du kan sende til leads og kunder
+
+Avtalemalen er et praktisk utgangspunkt, ikke juridisk rådgivning. Få gjerne en regnskapsfører/jurist til å se over når du begynner å ta betalt fast.
+
 ## Filer
 
 - `index.html` - struktur og tekst
