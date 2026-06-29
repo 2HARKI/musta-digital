@@ -396,6 +396,74 @@ h3 {
   scroll-margin-top: 84px;
 }
 
+.subpage-main {
+  padding-top: 78px;
+}
+
+.subpage-hero {
+  padding-block: 7rem 4.5rem;
+  border-bottom: 1px solid var(--line);
+  background:
+    linear-gradient(135deg, rgba(21, 101, 255, 0.16), transparent 38%),
+    linear-gradient(180deg, rgba(8, 23, 47, 0.92), rgba(3, 7, 18, 0.98));
+}
+
+.subpage-hero h1 {
+  max-width: 860px;
+  font-size: 3.85rem;
+}
+
+.subpage-hero .hero-lead {
+  max-width: 780px;
+}
+
+.subpage-grid {
+  display: grid;
+  grid-template-columns: 0.98fr 1.02fr;
+  gap: 1rem;
+}
+
+.content-panel,
+.text-panel {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(10, 24, 48, 0.92), rgba(6, 16, 38, 0.84));
+}
+
+.content-panel {
+  min-height: 100%;
+  padding: 1.5rem;
+}
+
+.text-panel {
+  padding: 1.6rem;
+}
+
+.content-panel p,
+.text-panel p,
+.subpage-list,
+.subpage-copy {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.content-panel h2,
+.text-panel h2 {
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.subpage-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1rem 0 0;
+  padding-left: 1.15rem;
+}
+
+.subpage-cta {
+  margin-top: 1.5rem;
+}
+
 .intro-section,
 .proof-section,
 .fit-section {
@@ -1084,9 +1152,14 @@ textarea::placeholder {
   .intro-grid,
   .contact-grid,
   .faq-grid,
-  .fit-grid {
+  .fit-grid,
+  .subpage-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
+  }
+
+  .subpage-hero h1 {
+    font-size: 3rem;
   }
 
   .service-grid,
@@ -1172,6 +1245,19 @@ textarea::placeholder {
 
   .section {
     padding-block: 4.4rem;
+  }
+
+  .subpage-hero {
+    padding-block: 5.5rem 3.5rem;
+  }
+
+  .subpage-hero h1 {
+    font-size: 2.25rem;
+  }
+
+  .content-panel,
+  .text-panel {
+    padding: 1.15rem;
   }
 
   .button {
