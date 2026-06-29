@@ -3,14 +3,21 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Musta Digital | Nettsider og bookingsystemer for små bedrifter</title>
-    <meta name="description" content="Vi hjelper små bedrifter fra Google-profil til profesjonell nettside, bookingsystem og månedlig digital oppfølging.">
+    <title>Musta Digital | Nettsider, SEO og digital synlighet for små bedrifter</title>
+    <meta name="description" content="Musta Digital hjelper små bedrifter med profesjonelle nettsider, SEO, Google-klar struktur, booking og digital synlighet som gjør det enklere å få henvendelser.">
     <meta name="theme-color" content="#08172F">
-    <meta property="og:title" content="Musta Digital | Nettsider for små bedrifter">
-    <meta property="og:description" content="Profesjonelle nettsider, booking og synlighet for bedrifter som vil vokse digitalt.">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Musta Digital | Nettsider, SEO og digital synlighet">
+    <meta property="og:description" content="Profesjonelle nettsider, booking og synlighet for små bedrifter som vil bli enklere å finne og kontakte.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.mustadigital.no/">
-    <meta property="og:image" content="assets/hero-devices-clean.png">
+    <meta property="og:image" content="https://www.mustadigital.no/assets/hero-devices-clean.png">
+    <meta property="og:site_name" content="Musta Digital">
+    <meta property="og:locale" content="nb_NO">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Musta Digital | Nettsider, SEO og digital synlighet">
+    <meta name="twitter:description" content="Nettsider, SEO og digital synlighet for små bedrifter.">
+    <meta name="twitter:image" content="https://www.mustadigital.no/assets/hero-devices-clean.png">
     <link rel="canonical" href="https://www.mustadigital.no/">
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="preload" href="assets/hero-devices-clean.png" as="image">
@@ -33,6 +40,7 @@
           <a href="/nettsider/">Nettsider</a>
           <a href="/seo/">SEO</a>
           <a href="/google-ads/">Google Ads</a>
+          <a href="/nettside-for-gravebedrift/">Gravebedrift</a>
           <a href="/om-oss/">Om oss</a>
           <a href="#prosess">Prosess</a>
           <a href="#faq">FAQ</a>
@@ -417,6 +425,7 @@
           <a href="/nettsider/">Nettsider</a>
           <a href="/seo/">SEO</a>
           <a href="/google-ads/">Google Ads</a>
+          <a href="/nettside-for-gravebedrift/">Gravebedrift</a>
           <a href="/digital-markedsforing/">Markedsføring</a>
           <a href="/om-oss/">Om oss</a>
           <a href="#kontakt">Kontakt</a>
@@ -427,13 +436,118 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "ProfessionalService",
-        "name": "Musta Digital",
-        "description": "Nettsider, bookingsystemer og digital synlighet for små bedrifter.",
-        "email": "kontakt@mustadigital.no",
-        "telephone": "+47 978 64 067",
-        "areaServed": "Norway",
-        "url": "https://www.mustadigital.no/"
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://www.mustadigital.no/#website",
+            "name": "Musta Digital",
+            "url": "https://www.mustadigital.no/",
+            "inLanguage": "nb-NO",
+            "publisher": {
+              "@id": "https://www.mustadigital.no/#business"
+            }
+          },
+          {
+            "@type": "ProfessionalService",
+            "@id": "https://www.mustadigital.no/#business",
+            "name": "Musta Digital",
+            "description": "Musta Digital hjelper små bedrifter med profesjonelle nettsider, SEO, Google-klar struktur og digital synlighet.",
+            "email": "kontakt@mustadigital.no",
+            "telephone": "+47 978 64 067",
+            "areaServed": "Norway",
+            "url": "https://www.mustadigital.no/",
+            "image": "https://www.mustadigital.no/assets/hero-devices-clean.png",
+            "logo": "https://www.mustadigital.no/assets/logo.svg",
+            "hasOfferCatalog": {
+              "@type": "OfferCatalog",
+              "name": "Digitale tjenester",
+              "itemListElement": [
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Nettsider for små bedrifter",
+                    "url": "https://www.mustadigital.no/nettsider/"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "SEO for små bedrifter",
+                    "url": "https://www.mustadigital.no/seo/"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Google Ads for små bedrifter",
+                    "url": "https://www.mustadigital.no/google-ads/"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Nettside for gravebedrift",
+                    "url": "https://www.mustadigital.no/nettside-for-gravebedrift/"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Digital markedsføring for små bedrifter",
+                    "url": "https://www.mustadigital.no/digital-markedsforing/"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "name": ["Nettsider", "SEO", "Google Ads", "Nettside for gravebedrift", "Digital markedsføring", "Om oss", "Kontakt"],
+            "url": [
+              "https://www.mustadigital.no/nettsider/",
+              "https://www.mustadigital.no/seo/",
+              "https://www.mustadigital.no/google-ads/",
+              "https://www.mustadigital.no/nettside-for-gravebedrift/",
+              "https://www.mustadigital.no/digital-markedsforing/",
+              "https://www.mustadigital.no/om-oss/",
+              "https://www.mustadigital.no/#kontakt"
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Må bedriften ha logo, bilder og tekst klart?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Nei. Musta Digital kan starte med eksisterende Google-profil, bilder fra telefonen og enkel informasjon om tjenester, kontaktinfo og åpningstider."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Hvor raskt kan en nettside være klar?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "En enkel nettside kan ofte være klar på 7 til 14 dager når innholdet er på plass. Mer avanserte bookingløsninger tar litt lenger tid."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Kan nettsiden kobles til eget domene?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Ja. Nettsiden kan kobles til bedriftens domene, eller Musta Digital kan hjelpe med å finne og sette opp et nytt domene."
+                }
+              }
+            ]
+          }
+        ]
       }
     </script>
     <script defer src="/_vercel/insights/script.js"></script>

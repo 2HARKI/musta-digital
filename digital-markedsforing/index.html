@@ -6,10 +6,18 @@
     <title>Digital markedsføring for små bedrifter | Musta Digital</title>
     <meta name="description" content="Musta Digital hjelper små bedrifter med nettside, SEO, Google-profil og enkel digital markedsføring som gjør bedriften mer synlig.">
     <meta name="theme-color" content="#08172F">
+    <meta name="robots" content="index, follow">
     <meta property="og:title" content="Digital markedsføring for små bedrifter | Musta Digital">
     <meta property="og:description" content="En ryddig digital start for små bedrifter som vil bli funnet og kontaktet.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.mustadigital.no/digital-markedsforing/">
+    <meta property="og:image" content="https://www.mustadigital.no/assets/hero-devices-clean.png">
+    <meta property="og:site_name" content="Musta Digital">
+    <meta property="og:locale" content="nb_NO">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Digital markedsføring for små bedrifter | Musta Digital">
+    <meta name="twitter:description" content="Nettside, SEO, Google-profil og enkel digital markedsføring for små bedrifter.">
+    <meta name="twitter:image" content="https://www.mustadigital.no/assets/hero-devices-clean.png">
     <link rel="canonical" href="https://www.mustadigital.no/digital-markedsforing/">
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/styles.css">
@@ -26,6 +34,7 @@
           <a href="/nettsider/">Nettsider</a>
           <a href="/seo/">SEO</a>
           <a href="/google-ads/">Google Ads</a>
+          <a href="/nettside-for-gravebedrift/">Gravebedrift</a>
           <a href="/digital-markedsforing/">Markedsføring</a>
           <a href="/om-oss/">Om oss</a>
           <a href="/#kontakt">Kontakt</a>
@@ -104,6 +113,7 @@
           <a href="/nettsider/">Nettsider</a>
           <a href="/seo/">SEO</a>
           <a href="/google-ads/">Google Ads</a>
+          <a href="/nettside-for-gravebedrift/">Gravebedrift</a>
           <a href="/digital-markedsforing/">Markedsføring</a>
           <a href="/om-oss/">Om oss</a>
           <a href="/#kontakt">Kontakt</a>
@@ -113,16 +123,37 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Service",
-        "name": "Digital markedsføring for små bedrifter",
-        "description": "Musta Digital hjelper små bedrifter med nettside, SEO, Google-profil og enkel digital markedsføring.",
-        "provider": {
-          "@type": "ProfessionalService",
-          "name": "Musta Digital",
-          "url": "https://www.mustadigital.no/"
-        },
-        "areaServed": "Norway",
-        "url": "https://www.mustadigital.no/digital-markedsforing/"
+        "@graph": [
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Musta Digital",
+                "item": "https://www.mustadigital.no/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Digital markedsføring",
+                "item": "https://www.mustadigital.no/digital-markedsforing/"
+              }
+            ]
+          },
+          {
+            "@type": "Service",
+            "name": "Digital markedsføring for små bedrifter",
+            "description": "Musta Digital hjelper små bedrifter med nettside, SEO, Google-profil og enkel digital markedsføring.",
+            "provider": {
+              "@type": "ProfessionalService",
+              "name": "Musta Digital",
+              "url": "https://www.mustadigital.no/"
+            },
+            "areaServed": "Norway",
+            "url": "https://www.mustadigital.no/digital-markedsforing/"
+          }
+        ]
       }
     </script>
     <script src="/script.js"></script>
